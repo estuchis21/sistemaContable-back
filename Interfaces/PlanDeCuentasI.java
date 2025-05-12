@@ -4,13 +4,13 @@
  */
 package sistemacontable.back.Interfaces;
 
-import sistemacontable.back.Models.Usuario;
+import sistemacontable.back.Models.Cuentas;
 
 /**
  *
  * @author esteb
  */
-public interface UserRepositoryI {
-    public void insertUser(Usuario usuario);
-    public Usuario getUserById(int id_usuario);
+public interface PlanDeCuentasI {
+    public void insertCuenta(Cuentas cuenta);
+    public void mostrarCuentaPorId(long id_cuenta);
 }
