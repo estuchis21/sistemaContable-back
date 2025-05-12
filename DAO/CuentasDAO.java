@@ -6,7 +6,7 @@ package sistemacontable.back.DAO;
 
 import sistemacontable.back.Interfaces.PlanDeCuentasI;
 import sistemacontable.back.Models.Cuentas;
-import sistemacontable.back.ConexionDB; // Importar ConexionDB
+import sistemacontable.sistemaContable.back.ConexionDB; // Importar ConexionDB
 
 import java.sql.CallableStatement;
 import java.sql.Connection;

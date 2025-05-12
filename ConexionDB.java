@@ -1,4 +1,4 @@
-package sistemacontable.back;
+package sistemacontable.sistemaContable.back;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

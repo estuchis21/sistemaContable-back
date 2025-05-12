@@ -1,12 +1,11 @@
 package sistemacontable.back.DAO;
-
-import sistemacontable.sistemaContable.back.Models.Usuario;
-import sistemacontable.sistemaContable.back.Interfaces.UserRepositoryI;
-import sistemacontable.back.ConexionDB; // Importar ConexionDB
+import sistemacontable.sistemaContable.back.ConexionDB; // Importar ConexionDB
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import sistemacontable.back.Interfaces.UserRepositoryI;
+import sistemacontable.back.Models.Usuario;
 
 public class UserDAO implements UserRepositoryI {
 
