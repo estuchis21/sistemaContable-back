@@ -4,6 +4,7 @@
  */
 package sistemacontable.back.Services;
 
+import sistemacontable.back.Interfaces.PlanDeCuentasServiceI;
 import sistemacontable.back.DAO.CuentasDAO;
 import sistemacontable.back.Models.Cuentas;
 
