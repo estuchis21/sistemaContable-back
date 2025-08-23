@@ -89,7 +89,7 @@ public class LibroDiarioDAO implements LibroDiarioI {
             CallableStatement stmt = conn.prepareCall(sql)){
             stmt.setInt(1, operaciones.getId_asiento());
             stmt.setInt(2, operaciones.getId_tipo_movimiento());
-            stmt.setDouble(3, operaciones.getMonto());
+            stmt.setBigDecimal(3, operaciones.getMonto());
             stmt.execute();
             return true;
         }
