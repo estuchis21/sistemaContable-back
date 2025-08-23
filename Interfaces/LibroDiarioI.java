@@ -15,5 +15,5 @@ public interface LibroDiarioI {
     public Asientos selectAsientoPorId(int id_asiento);
     public boolean existeAsiento(int id_cuenta);
     public boolean generarAsiento(Asientos asientos);
-    public Integer generarOperacionPorAsiento(Operaciones operaciones);
+    public boolean generarOperacionPorAsiento(Operaciones operaciones);
 }
