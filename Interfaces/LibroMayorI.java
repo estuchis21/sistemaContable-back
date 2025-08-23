@@ -8,7 +8,8 @@ import java.util.List; // ✅ Corregido
 import sistemacontable.back.Models.LibroMayor;
 
 public interface LibroMayorI {
-    List<LibroMayor> getLibroMayor(int idCuenta);
+    public List<LibroMayor> getLibroMayor(int idCuenta);
+    public boolean existeLaCuenta(int id_cuenta);
 }
 
 
