@@ -6,13 +6,13 @@ package sistemacontable.back.DAO;
 
 import sistemacontable.back.Interfaces.PlanDeCuentasI;
 import sistemacontable.back.Models.Cuentas;
+import sistemacontable.sistemaContable.back.ConexionDB; // Importar ConexionDB
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sistemacontable.back.ConnectionDB;
 
 /**
  *
@@ -25,14 +25,14 @@ public class CuentasDAO implements PlanDeCuentasI {
        // Llamamos al procedimiento almacenado "insertarUsuario"
         String sql = "{call insertarCuenta(?, ?, ?, ?)}"; // Procedimiento almacenado
 
-        try (Connection conn = ConnectionDB.getConnection();  // Usamos la conexión de la clase ConexionDB
+        try (Connection conn = ConexionDB.getConnection();  // Usamos la conexión de la clase ConexionDB
              CallableStatement stmt = conn.prepareCall(sql)) {
 
             // Asignamos los parámetros del usuario al procedimiento almacenado
             stmt.setString(1, cuenta.getCodigo());
             stmt.setString(2, cuenta.getNombre());
-            stmt.setInt(3, cuenta.getId_Tipo_saldo());
-            stmt.setFloat(4, cuenta.getSaldo());
+            stmt.setLong(3, cuenta.getId_Tipo_saldo());
+            stmt.setLong(4, cuenta.getSaldo());
 
             // Ejecutamos el procedimiento almacenado
             stmt.execute();
@@ -48,7 +48,7 @@ public class CuentasDAO implements PlanDeCuentasI {
         String sql = "{call MostrarCuentaPorNombre(?)}";
         Cuentas cuenta = null;
         
-        try (Connection conn = ConnectionDB.getConnection();
+        try (Connection conn = ConexionDB.getConnection();
         CallableStatement stmt = conn.prepareCall(sql)){
             
             stmt.setLong(1, id_cuenta);

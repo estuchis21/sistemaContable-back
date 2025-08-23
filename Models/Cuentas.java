@@ -12,7 +12,7 @@ public class Cuentas {
     private String codigo;
     private String nombre;
     private int id_tipo_saldo;
-    private float saldo;
+    private long saldo;
     
     public Cuentas(){
        
@@ -49,7 +49,7 @@ public class Cuentas {
         this.id_tipo_saldo = id_tipo_saldo;
     }
 
-    public float getSaldo() {
+    public long getSaldo() {
         return saldo;
     }
 
