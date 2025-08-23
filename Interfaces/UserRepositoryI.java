@@ -11,6 +11,7 @@ import sistemacontable.back.Models.Usuario;
  * @author esteb
  */
 public interface UserRepositoryI {
-    public void insertUser(Usuario usuario);
+    public boolean insertUser(Usuario usuario);
     public Usuario getUserById(int id_usuario);
+    public boolean verSiExiste(int dni, String email, String username);
 }
