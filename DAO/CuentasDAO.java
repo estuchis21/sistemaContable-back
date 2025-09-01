@@ -44,7 +44,7 @@ public class CuentasDAO implements PlanDeCuentasI {
     }
 
     @Override
-    public void mostrarCuentaPorId(long id_cuenta) {
+    public Integer mostrarCuentaPorId(long id_cuenta) {
         String sql = "{call MostrarCuentaPorNombre(?)}";
         Cuentas cuenta = null;
         
@@ -70,5 +70,6 @@ public class CuentasDAO implements PlanDeCuentasI {
     }   catch (SQLException ex) {
             Logger.getLogger(CuentasDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
 }

@@ -12,5 +12,5 @@ import sistemacontable.back.Models.Cuentas;
  */
 public interface PlanDeCuentasI {
     public void insertCuenta(Cuentas cuenta);
-    public void mostrarCuentaPorId(long id_cuenta);
+    public Integer mostrarCuentaPorId(long id_cuenta);
 }

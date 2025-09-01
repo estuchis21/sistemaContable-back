@@ -13,4 +13,5 @@ import sistemacontable.back.Models.Usuario;
 public interface AuthI {
     public boolean registrar(Usuario users);
     public Usuario getUserById(int id_usuario);
+    public Usuario login(String username, String contrasena);
 }

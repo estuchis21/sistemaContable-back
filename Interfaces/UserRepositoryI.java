@@ -14,4 +14,5 @@ public interface UserRepositoryI {
     public boolean insertUser(Usuario usuario);
     public Usuario getUserById(int id_usuario);
     public boolean verSiExiste(int dni, String email, String username);
+    public Usuario login (String username, String contrasena);
 }

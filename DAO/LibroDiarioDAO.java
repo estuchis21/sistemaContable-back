@@ -1,33 +1,22 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package sistemacontable.back.DAO;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;       // Necesario para ResultSet
-import java.sql.Timestamp;       // Para convertir a LocalDateTime
+import java.math.BigDecimal;
 import sistemacontable.back.Interfaces.LibroDiarioI;
 import sistemacontable.back.Models.Asientos;
 import sistemacontable.back.Models.Operaciones;
 import sistemacontable.back.ConnectionDB;
 
+import java.sql.*;
+import java.time.LocalDateTime;
 
-/**
- *
- * @author Esteban
- */
-public class LibroDiarioDAO implements LibroDiarioI { 
+public class LibroDiarioDAO implements LibroDiarioI {
+
+    // -------------------------------
+    // Seleccionar asiento por ID
+    // -------------------------------
     @Override
     public Asientos selectAsientoPorId(int id_asiento) {
-        if(!existeAsiento(id_asiento)){
-            System.err.println("No existe tal asiento");
-            return null;  // corta la ejecución si no existe
-        }
-
         String sql = "{call selectAsientoPorId(?)}";
-
         try (Connection conn = ConnectionDB.getConnection();
              CallableStatement stmt = conn.prepareCall(sql)) {
 
@@ -38,83 +27,89 @@ public class LibroDiarioDAO implements LibroDiarioI {
                 Asientos asiento = new Asientos();
                 asiento.setId_asiento(rs.getInt("id_asiento"));
                 asiento.setDescripcion(rs.getString("descripcion"));
-
                 Timestamp ts = rs.getTimestamp("fecha_asiento");
                 if (ts != null) {
                     asiento.setFecha_asiento(ts.toLocalDateTime());
                 }
-
                 return asiento;
             }
-        } 
-        catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
-        }
 
+        } catch (Exception e) {
+            System.err.println("Error selectAsientoPorId: " + e.getMessage());
+        }
         return null;
     }
-    
-    
+
+    // -------------------------------
+    // Crear asiento y obtener su ID
+    // -------------------------------
     @Override
-    public boolean generarAsiento(Asientos asientos) {
-        
+    public boolean generarAsiento(Asientos asiento) {
         String sql = "{call sp_insertar_asiento(?)}";
-        if(!existeAsiento(asientos.getId_asiento())){
-            System.err.println("No existe tal asiento");
-            return false; // no insertamos
-        }
-        
         try(Connection conn = ConnectionDB.getConnection();
             CallableStatement stmt = conn.prepareCall(sql)){
-            stmt.setString(1, asientos.getDescripcion());
-            stmt.execute();
-            return true;
+
+            stmt.setString(1, asiento.getDescripcion());
+
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                asiento.setId_asiento(rs.getInt("id_asiento"));
+                return true;
+            }
+
+        } catch(Exception e){
+            System.err.println("Error generarAsiento: " + e.getMessage());
         }
-        catch(Exception e){
-            System.err.println("Error" + e.getMessage());
-            return false;
-        }
+        return false;
     }
 
     @Override
-    public boolean generarOperacionPorAsiento(Operaciones operaciones) {
-        String sql = "{call insertarOpsEnAsientos(?)}";     
-        
-        if(!existeAsiento(operaciones.getId_asiento())){
-            System.err.println("No existe tal asiento");
-            return false; // no insertamos
-        }
-        
-        try(Connection conn = ConnectionDB.getConnection();
-            CallableStatement stmt = conn.prepareCall(sql)){
-            stmt.setInt(1, operaciones.getId_asiento());
-            stmt.setInt(2, operaciones.getId_tipo_movimiento());
-            stmt.setBigDecimal(3, operaciones.getMonto());
+    public boolean generarOperacionPorAsiento(Operaciones op) {
+        String sql = "{call insertarOpsEnAsientos(?,?,?,?,?,?,?,?)}";
+
+        try (Connection conn = ConnectionDB.getConnection();
+             CallableStatement stmt = conn.prepareCall(sql)) {
+
+            stmt.setInt(1, op.getId_asiento());
+            stmt.setInt(2, op.getId_cuenta());
+            stmt.setInt(3, op.getId_tipo_movimiento());
+            stmt.setBigDecimal(4, java.math.BigDecimal.valueOf(op.getMonto()));
+            stmt.setString(5, op.getTipoLibro()); // obligatorio, no null
+            stmt.setBoolean(6, op.isIva21());
+            stmt.setBoolean(7, op.isIva105());
+            stmt.registerOutParameter(8, Types.INTEGER);
+
             stmt.execute();
+            op.setId_operacion(stmt.getInt(8));
+
+            System.out.println("Operación insertada correctamente, id_operacion=" + op.getId_operacion());
             return true;
-        }
-        catch(Exception e){
-            System.err.println("Error" + e.getMessage());
+
+        } catch (SQLException e) {
+            System.err.println("=== ERROR SQL AL GENERAR OPERACION ===");
+            System.err.println("Mensaje: " + e.getMessage());
+            System.err.println("Código error: " + e.getErrorCode());
+            System.err.println("Estado SQL: " + e.getSQLState());
+            return false;
+        } catch (Exception e) {
+            System.err.println("=== ERROR INESPERADO AL GENERAR OPERACION ===");
+            e.printStackTrace();
             return false;
         }
     }
-
     @Override
     public boolean existeAsiento(int id_asiento) {
         String sql = "{call ExisteAsiento(?)}";
-
         try (Connection conn = ConnectionDB.getConnection();
              CallableStatement stmt = conn.prepareCall(sql)) {
 
             stmt.setInt(1, id_asiento);
             ResultSet rs = stmt.executeQuery();
+            return rs.next();
 
-            return rs.next();  // true si hay fila, false si no
-        } 
-        catch (Exception e) {
-            System.err.println("Error: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Error existeAsiento: " + e.getMessage());
         }
         return false;
     }
-
 }
