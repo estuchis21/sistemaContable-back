@@ -6,10 +6,12 @@ package sistemacontable.back.DAO;
 
 import sistemacontable.back.Interfaces.PlanDeCuentasI;
 import sistemacontable.back.Models.Cuentas;
-
+import java.sql.ResultSet;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import sistemacontable.back.ConnectionDB;
@@ -32,7 +34,7 @@ public class CuentasDAO implements PlanDeCuentasI {
             stmt.setString(1, cuenta.getCodigo());
             stmt.setString(2, cuenta.getNombre());
             stmt.setInt(3, cuenta.getId_Tipo_saldo());
-            stmt.setFloat(4, cuenta.getSaldo());
+            stmt.setBigDecimal(4, cuenta.getSaldo());
 
             // Ejecutamos el procedimiento almacenado
             stmt.execute();
@@ -58,7 +60,7 @@ public class CuentasDAO implements PlanDeCuentasI {
                     cuenta.setCodigo(rs.getString("codigo"));
                     cuenta.setNombre(rs.getString("nombre"));
                     cuenta.setIdTipo_saldo(rs.getInt("id_tipo_saldo"));
-                    cuenta.setSaldo(rs.getLong("saldo"));
+                    cuenta.setSaldo(rs.getBigDecimal("saldo"));
                    
                 }
                 System.out.println(id_cuenta);
@@ -72,4 +74,30 @@ public class CuentasDAO implements PlanDeCuentasI {
         }
         return null;
     }
+    
+    @Override
+    public List<Cuentas> mostrarCuentas() {
+     List<Cuentas> listaCuentas = new ArrayList<>();
+     try (Connection conn = ConnectionDB.getConnection();
+          CallableStatement stmt = conn.prepareCall("{call selectCuentas}");
+          ResultSet rs = stmt.executeQuery()) {
+
+         while (rs.next()) {
+             Cuentas cuenta = new Cuentas();
+             cuenta.setId_cuenta(rs.getInt("id_cuenta"));
+             cuenta.setCodigo(rs.getString("codigo"));
+             cuenta.setNombre(rs.getString("cuenta"));
+             cuenta.setSaldo(rs.getBigDecimal("saldo"));
+             cuenta.setId_tipo_saldo(rs.getInt("id_tipo_saldo"));
+             listaCuentas.add(cuenta);
+         }
+
+     } catch (SQLException ex) {
+         ex.printStackTrace();
+     }
+
+     return listaCuentas; // NUNCA null
+ }
+
+
 }

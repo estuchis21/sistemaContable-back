@@ -4,6 +4,8 @@
  */
 package sistemacontable.back.Services;
 
+import java.util.ArrayList;
+import java.util.List;
 import sistemacontable.back.Interfaces.PlanDeCuentasServiceI;
 import sistemacontable.back.DAO.CuentasDAO;
 import sistemacontable.back.Models.Cuentas;
@@ -39,5 +41,18 @@ public class PlanDeCuentasService implements PlanDeCuentasServiceI {
         }
         return null;
     }
+    
+    @Override
+    public List<Cuentas> mostrarCuentas() {
+        try {
+            // Guardamos la lista que devuelve el DAO
+            List<Cuentas> lista = cuentasDAO.mostrarCuentas();
+            return lista != null ? lista : new ArrayList<>();
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
     
 }

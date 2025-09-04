@@ -4,6 +4,7 @@
  */
 package sistemacontable.back.Interfaces;
 
+import java.util.List;
 import sistemacontable.back.Models.Cuentas;
 
 /**
@@ -13,4 +14,5 @@ import sistemacontable.back.Models.Cuentas;
 public interface PlanDeCuentasI {
     public void insertCuenta(Cuentas cuenta);
     public Integer mostrarCuentaPorId(long id_cuenta);
+    public List<Cuentas> mostrarCuentas();
 }
