@@ -4,26 +4,48 @@
  */
 package sistemacontable.back.Models;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author esteb
  */
 public class Cuentas {
+    private int id_cuenta;
     private String codigo;
     private String nombre;
     private int id_tipo_saldo;
-    private long saldo;
+    private BigDecimal saldo;
     
     public Cuentas(){
        
     }
 
-    public Cuentas(String codigo, String nombre, int id_tipo_saldo, long saldo) {
+    public Cuentas(int id_cuenta, String codigo, String nombre, int id_tipo_saldo, BigDecimal saldo) {
+        this.id_cuenta = id_cuenta;
         this.codigo = codigo;
         this.nombre = nombre;
         this.id_tipo_saldo = id_tipo_saldo;
         this.saldo = saldo;
     }
+
+    public int getId_cuenta() {
+        return id_cuenta;
+    }
+
+    public void setId_cuenta(int id_cuenta) {
+        this.id_cuenta = id_cuenta;
+    }
+
+    public int getId_tipo_saldo() {
+        return id_tipo_saldo;
+    }
+
+    public void setId_tipo_saldo(int id_tipo_saldo) {
+        this.id_tipo_saldo = id_tipo_saldo;
+    }
+    
+    
 
     public String getCodigo() {
         return codigo;
@@ -49,11 +71,11 @@ public class Cuentas {
         this.id_tipo_saldo = id_tipo_saldo;
     }
 
-    public long getSaldo() {
+    public BigDecimal getSaldo() {
         return saldo;
     }
 
-    public void setSaldo(long saldo) {
+    public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
     }
    

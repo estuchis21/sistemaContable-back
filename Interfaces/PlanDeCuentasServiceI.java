@@ -9,10 +9,10 @@ import sistemacontable.back.Models.Cuentas;
 
 /**
  *
- * @author esteb
+ * @author Esteban
  */
-public interface PlanDeCuentasI {
-    public void insertCuenta(Cuentas cuenta);
-    public Integer mostrarCuentaPorId(long id_cuenta);
+public interface PlanDeCuentasServiceI {
+    public boolean insertarCuenta(Cuentas cuentas);
+    public Integer mostrarCuentaPorId(int id_cuenta);
     public List<Cuentas> mostrarCuentas();
 }

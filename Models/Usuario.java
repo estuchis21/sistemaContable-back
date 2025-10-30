@@ -9,6 +9,7 @@ package sistemacontable.back.Models;
  * @author esteb
  */
 public class Usuario {
+    private int id_usuario;
     private int dni;
     private String nombres;
     private String apellido;
@@ -20,7 +21,8 @@ public class Usuario {
     public Usuario(){}
 
     // Constructor con parámetros
-    public Usuario(int dni, String nombres, String apellido, String mail, String username, String contrasena, int idRol) {
+    public Usuario(int id_usuario, int dni, String nombres, String apellido, String mail, String username, String contrasena, int idRol) {
+        this.id_usuario = id_usuario;
         this.dni = dni;
         this.nombres = nombres;
         this.apellido = apellido;
@@ -28,6 +30,14 @@ public class Usuario {
         this.username = username;
         this.contrasena = contrasena;
         this.idRol = idRol;
+    }
+
+    public int getId_usuario() {
+        return id_usuario;
+    }
+
+    public void setId_usuario(int id_usuario) {
+        this.id_usuario = id_usuario;
     }
 
     // Getters y Setters

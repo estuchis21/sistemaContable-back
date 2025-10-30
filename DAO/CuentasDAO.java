@@ -6,13 +6,15 @@ package sistemacontable.back.DAO;
 
 import sistemacontable.back.Interfaces.PlanDeCuentasI;
 import sistemacontable.back.Models.Cuentas;
-import sistemacontable.sistemaContable.back.ConexionDB; // Importar ConexionDB
-
+import java.sql.ResultSet;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sistemacontable.back.ConnectionDB;
 
 /**
  *
@@ -25,14 +27,14 @@ public class CuentasDAO implements PlanDeCuentasI {
        // Llamamos al procedimiento almacenado "insertarUsuario"
         String sql = "{call insertarCuenta(?, ?, ?, ?)}"; // Procedimiento almacenado
 
-        try (Connection conn = ConexionDB.getConnection();  // Usamos la conexión de la clase ConexionDB
+        try (Connection conn = ConnectionDB.getConnection();  // Usamos la conexión de la clase ConexionDB
              CallableStatement stmt = conn.prepareCall(sql)) {
 
             // Asignamos los parámetros del usuario al procedimiento almacenado
             stmt.setString(1, cuenta.getCodigo());
             stmt.setString(2, cuenta.getNombre());
-            stmt.setLong(3, cuenta.getId_Tipo_saldo());
-            stmt.setLong(4, cuenta.getSaldo());
+            stmt.setInt(3, cuenta.getId_Tipo_saldo());
+            stmt.setBigDecimal(4, cuenta.getSaldo());
 
             // Ejecutamos el procedimiento almacenado
             stmt.execute();
@@ -44,11 +46,11 @@ public class CuentasDAO implements PlanDeCuentasI {
     }
 
     @Override
-    public void mostrarCuentaPorId(long id_cuenta) {
+    public Integer mostrarCuentaPorId(long id_cuenta) {
         String sql = "{call MostrarCuentaPorNombre(?)}";
         Cuentas cuenta = null;
         
-        try (Connection conn = ConexionDB.getConnection();
+        try (Connection conn = ConnectionDB.getConnection();
         CallableStatement stmt = conn.prepareCall(sql)){
             
             stmt.setLong(1, id_cuenta);
@@ -58,7 +60,7 @@ public class CuentasDAO implements PlanDeCuentasI {
                     cuenta.setCodigo(rs.getString("codigo"));
                     cuenta.setNombre(rs.getString("nombre"));
                     cuenta.setIdTipo_saldo(rs.getInt("id_tipo_saldo"));
-                    cuenta.setSaldo(rs.getLong("saldo"));
+                    cuenta.setSaldo(rs.getBigDecimal("saldo"));
                    
                 }
                 System.out.println(id_cuenta);
@@ -70,5 +72,32 @@ public class CuentasDAO implements PlanDeCuentasI {
     }   catch (SQLException ex) {
             Logger.getLogger(CuentasDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return null;
     }
+    
+    @Override
+    public List<Cuentas> mostrarCuentas() {
+     List<Cuentas> listaCuentas = new ArrayList<>();
+     try (Connection conn = ConnectionDB.getConnection();
+          CallableStatement stmt = conn.prepareCall("{call selectCuentas}");
+          ResultSet rs = stmt.executeQuery()) {
+
+         while (rs.next()) {
+             Cuentas cuenta = new Cuentas();
+             cuenta.setId_cuenta(rs.getInt("id_cuenta"));
+             cuenta.setCodigo(rs.getString("codigo"));
+             cuenta.setNombre(rs.getString("cuenta"));
+             cuenta.setSaldo(rs.getBigDecimal("saldo"));
+             cuenta.setId_tipo_saldo(rs.getInt("id_tipo_saldo"));
+             listaCuentas.add(cuenta);
+         }
+
+     } catch (SQLException ex) {
+         ex.printStackTrace();
+     }
+
+     return listaCuentas; // NUNCA null
+ }
+
+
 }

@@ -8,11 +8,10 @@ import sistemacontable.back.Models.Usuario;
 
 /**
  *
- * @author esteb
+ * @author Esteban
  */
-public interface UserRepositoryI {
-    public boolean insertUser(Usuario usuario);
+public interface AuthI {
+    public boolean registrar(Usuario users);
     public Usuario getUserById(int id_usuario);
-    public boolean verSiExiste(int dni, String email, String username);
-    public Usuario login (String username, String contrasena);
+    public Usuario login(String username, String contrasena);
 }
